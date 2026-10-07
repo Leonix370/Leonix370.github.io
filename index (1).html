@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OCaml · MP2I Fénelon Sainte-Marie – Amine IRAQI</title>
+<style>
+:root{--bg:#fff;--fg:#1c2230;--mu:#5d6678;--cd:#f3f5f9;--bd:#dce1ea;--ac:#c2410c;--kw:#7c3aed;--cm:#6b7280;--n:#e8f1ff;--w:#fff0e3;--t:#e8f7ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--fg:#e6e9f0;--mu:#9aa3b5;--cd:#1d222d;--bd:#2c3342;--ac:#fb923c;--kw:#c4b5fd;--cm:#8b93a5;--n:#1a2a44;--w:#3a2616;--t:#16301f}}
+:root[data-theme="dark"]{--bg:#14171f;--fg:#e6e9f0;--mu:#9aa3b5;--cd:#1d222d;--bd:#2c3342;--ac:#fb923c;--kw:#c4b5fd;--cm:#8b93a5;--n:#1a2a44;--w:#3a2616;--t:#16301f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wr{display:flex;min-height:100vh}
+nav{width:280px;flex:none;border-right:1px solid var(--bd);background:var(--cd);padding:16px;position:sticky;top:0;align-self:flex-start;max-height:100vh;overflow:auto}
+nav h1{font-size:17px;margin:0 0 12px;color:var(--ac)}
+nav button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--fg);font:inherit;font-weight:600;padding:7px 9px;border-radius:7px;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff}
+nav a{display:block;color:var(--mu);text-decoration:none;font-size:14px;padding:2px 9px 2px 22px}
+nav a:hover{color:var(--ac)}
+main{flex:1;min-width:0;max-width:820px;padding:24px 28px 60px}
+h1{font-size:28px;margin:0 0 8px}h2{font-size:21px;margin:34px 0 6px;padding-top:6px;border-top:1px solid var(--bd)}
+pre{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:11px 13px;overflow-x:auto;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:12px 0}
+code{background:var(--cd);padding:1px 5px;border-radius:4px;font:.9em ui-monospace,Menlo,Consolas,monospace}
+pre code{background:none;padding:0}.k{color:var(--kw);font-weight:600}.c{color:var(--cm)}
+.box{border-radius:9px;padding:10px 14px;margin:14px 0;border-left:4px solid var(--ac)}
+.box>b{display:block;margin-bottom:2px}.bn{background:var(--n)}.bw{background:var(--w)}.bt{background:var(--t)}
+.box p,.box ul{margin:4px 0}
+table{border-collapse:collapse;display:block;overflow-x:auto;margin:12px 0}td,th{border:1px solid var(--bd);padding:5px 9px;text-align:left}
+.pg{display:flex;justify-content:space-between;gap:10px;margin-top:40px}
+.pg button{border:1px solid var(--bd);background:var(--cd);color:var(--fg);font:inherit;padding:8px 14px;border-radius:8px;cursor:pointer}
+@media(max-width:820px){.wr{display:block}nav{position:static;width:auto;max-height:none;border:0;border-bottom:1px solid var(--bd)}nav button{display:inline-block;width:auto}nav a{display:none}main{padding:18px 16px 48px}}
+.ex{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin:14px 0;background:var(--cd)}
+.ex input,.ex textarea{width:100%;box-sizing:border-box;font:14px ui-monospace,Menlo,Consolas,monospace;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:7px;padding:8px;margin:8px 0}
+.ex button{border:0;background:var(--ac);color:#fff;font:inherit;padding:6px 14px;border-radius:7px;cursor:pointer;margin-right:8px}
+.good{color:#16a34a}.bad{color:#dc2626}
+.tl{display:flex;justify-content:space-between;gap:12px;text-decoration:none;color:var(--fg);padding:4px 0;border-bottom:1px dotted var(--bd)}.tl.s{padding-left:24px;color:var(--mu)}.tl:hover{color:var(--ac)}
+.who{margin:-6px 0 12px;font-size:13px;color:var(--mu)}
+.ex button.alt{background:var(--bg);color:var(--fg);border:1px solid var(--bd)}
+.hist{max-height:240px;overflow:auto;margin-top:6px}.hb{border-top:1px dashed var(--bd);padding-top:4px}.hh{font:12px ui-monospace,Menlo,Consolas,monospace;color:var(--mu)}.hist pre{margin:2px 0 6px;white-space:pre-wrap}
+</style></head><body>
+<div class="wr"><nav id="nv"></nav><main id="mn"></main></div>
+<script>
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const KW='let|rec|in|if|then|else|match|with|function|fun|and|type|of|when|begin|end|for|to|downto|do|done|while|try|raise|exception|assert|mutable|open';
+const RX=new RegExp('(\\(\\*[\\s\\S]*?\\*\\))|\\b('+KW+')\\b','g');
+const c=s=>'<pre>'+esc(s.trim()).replace(RX,(m,a,b)=>a?'<i class="c">'+a+'</i>':'<b class="k">'+b+'</b>')+'</pre>';
+const box=(t,h,x)=>`<div class="box b${t}"><b>${h}</b>${x}</div>`;
+const T=[
+['1 · Variables',[
+['Premiers pas',`<p>L'interpréteur interactif (<em>toplevel</em>) lit une expression, l'évalue et affiche le résultat. Les caractères <code>;;</code> terminent l'expression. Chaque expression est d'abord <b>typée</b>, puis évaluée.</p>${c(`1 + 2 * 3;;
+- : int = 7`)}${box('n','Le système de typage',`<ul><li><b>Typage fort</b> : une expression mal typée ne peut pas être évaluée.</li><li><b>Typage statique</b> : les types sont vérifiés <u>avant</u> l'exécution.</li><li><b>Inférence automatique</b> : OCaml calcule seul le type des expressions.</li></ul>`)}`],
+['Déclarer une variable',`<p>Une <b>déclaration</b> lie un identifiant à la valeur d'une expression : <code>let &lt;identifiant&gt; = &lt;expression&gt;</code>. L'expression de droite est évaluée, puis liée à l'identifiant. Le nom est alphanumérique, ne commence pas par une majuscule et n'est pas un mot-clé.</p>${c(`let s = 1 + 2 + 3;;
+val s : int = 6
+let somme_carre = s * s;;
+val somme_carre : int = 36
+let s = 4;;
+val s : int = 4
+s;;
+- : int = 4
+somme_carre;;
+- : int = 36   (* inchangé : immuabilité *)`)}${box('w','Immuabilité',`<p>Une fois liée, la valeur d'une variable ne peut plus être modifiée. Une nouvelle liaison <b>masque</b> la précédente sans la remplacer. Pas de compteur ni de boucle <code>for</code>/<code>while</code> « classique » a priori : il faut repenser sa façon de programmer.</p>`)}`],
+['1.1 Portée',`<p>La <b>portée</b> d'une liaison est le contexte où l'on peut accéder à la valeur liée : <b>globale</b> si la valeur est accessible dans tout le programme, <b>locale</b> sinon. On limite la portée avec <code>in</code> : <code>let x = e1 in e2</code> évalue <code>e1</code>, lie <code>x</code>, puis évalue <code>e2</code> avec cette liaison.</p>${c(`let x = 1;;                (* liaison globale *)
+let y = x + 2 in           (* liaison locale *)
+  let x = y + 1 in         (* masque la première *)
+  x;;
+- : int = 4
+x;;
+- : int = 1
+y;;
+Error: Unbound value y`)}`],
+['1.2 Opérations sur les nombres',`<p>Entiers (<code>int</code>) : <code>+ - * /</code> (division entière) et <code>mod</code>. Flottants (<code>float</code>) : notation avec un point, opérateurs <code>+. -. *. /.</code> et <code>**</code>. On ne mélange <b>jamais</b> <code>int</code> et <code>float</code>.</p>${c(`9 / 2;;  - : int = 4
+9 mod 2;;  - : int = 1
+3.5 +. 2.;;  - : float = 5.5
+3.1415 / 2;;
+Error: This expression has type float but an expression was expected of type int`)}${box('n','Dépassement de capacité et flottants',`<p>Les <code>int</code> et <code>float</code> ont une représentation finie. Sur une machine 64 bits : <code>max_int = 4611686018427387903</code> (2<sup>62</sup>−1) et <code>max_int + 1</code> vaut <code>min_int</code>. Les flottants sont approchés : ne jamais tester leur égalité avec <code>=</code>.</p>${c(`0.1 +. 0.2 = 0.3;;
+- : bool = false
+abs_float (0.1 +. 0.2 -. 0.3) <= 1e-15;;
+- : bool = true`)}<p>Le problème vient de la machine, pas d'OCaml (même chose en Python ou en C).</p>`)}`],
+['1.3 Chaînes de caractères',`<p>Le type <code>string</code> : guillemets doubles. Opérations : concaténation <code>^</code>, longueur <code>String.length</code>, accès au i-ème caractère <code>s.[i]</code> (à partir de 0). Le type <code>char</code> : un caractère entre guillemets simples (<code>'v'</code>, <code>'\\n'</code>, <code>'\\t'</code>). Les chaînes sont <b>immuables</b>.</p>${c(`let chaine = "Bon" ^ "jour " ^ "!";;
+val chaine : string = "Bonjour !"
+String.length chaine;;  - : int = 9
+chaine.[1];;  - : char = 'o'`)}`],
+['1.4 Opérateurs booléens',`<p>Type <code>bool</code> : <code>true</code>, <code>false</code>. Égalité logique <code>=</code> (contenu), égalité physique <code>==</code> (adresse mémoire) ; inégalité <code>&lt;&gt;</code>, <code>&lt; &lt;= &gt; &gt;=</code> ; logique : <code>not</code>, <code>&amp;&amp;</code>, <code>||</code>. Les codes ASCII : <code>Char.code</code>.</p>${box('n','Opérateurs paresseux',`<p><code>&amp;&amp;</code> et <code>||</code> évaluent d'abord l'expression de gauche ; celle de droite n'est évaluée que si c'est nécessaire.</p>${c(`true && (1/0 = 1);;
+Exception: Division_by_zero.
+false && (1/0 = 1);;
+- : bool = false`)}`)}${box('n','Priorité et associativité',`<p><code>=</code> est prioritaire sur <code>&amp;&amp;</code>, qui est prioritaire sur <code>||</code>. Les opérateurs <code>&amp;&amp;</code> et <code>||</code> sont associatifs à droite, <code>+</code> à gauche.</p>`)}`]
+]],
+['2 · Fonctions',[
+['2.1 Fonctions de conversion',`<p>Pas de conversion implicite : <code>type2_of_type1</code> convertit une valeur de <code>type1</code> en <code>type2</code>. Les fonctions sont des valeurs : leur <b>signature</b> s'affiche avec <code>-&gt;</code>.</p>${c(`float_of_int;;
+- : int -> float = <fun>
+2. ** (float_of_int 3);;
+- : float = 8.`)}<table><tr><th>Fonction</th><th>Signature</th><th>Rôle</th></tr><tr><td><code>float_of_int</code></td><td>int -&gt; float</td><td>injection naturelle</td></tr><tr><td><code>int_of_float</code></td><td>float -&gt; int</td><td>partie entière (troncature)</td></tr><tr><td><code>int_of_char</code></td><td>char -&gt; int</td><td>code ASCII</td></tr><tr><td><code>char_of_int</code></td><td>int -&gt; char</td><td>caractère de ce code</td></tr><tr><td><code>int_of_string</code></td><td>string -&gt; int</td><td>entier encodé par la chaîne</td></tr><tr><td><code>string_of_int</code></td><td>int -&gt; string</td><td>chaîne de l'entier</td></tr></table>${box('w','Parenthèses',`<p>Jamais autour de l'argument, mais autour de tout l'<b>appel</b> de fonction : <code>f (g x)</code>, pas <code>f(g) x</code>.</p>`)}`],
+['2.2 Fonctions d'+"'affichage",`<p>Une fonction à <b>effet de bord</b> modifie l'état global du programme (affichage…). <code>print_int</code>, <code>print_float</code>, <code>print_string</code>, <code>print_endline</code> (avec saut de ligne), <code>print_newline : unit -&gt; unit</code>. Elles renvoient <code>unit</code>, dont l'unique valeur est <code>()</code> : ce sont des <b>procédures</b>. On les enchaîne avec <code>;</code>. Lecture : <code>read_int : unit -&gt; int</code>.</p>${c(`print_int 1; print_int 0; print_endline "2";;
+102
+- : unit = ()
+let () = let input = read_int () in print_int (input + 2);;`)}<p><code>print_newline</code> est la fonction ; <code>print_newline ()</code> est son appel. Un programme complet est une succession de déclarations.</p>`],
+['2.3 Déclarer une fonction',`<p><code>let &lt;id&gt; &lt;arg_1&gt; ... &lt;arg_n&gt; = &lt;expression&gt;</code>. La valeur renvoyée est la <b>dernière expression évaluée</b> : pas de <code>return</code>. L'application se fait par juxtaposition.</p>${c(`let carre x = x * x;;
+val carre : int -> int = <fun>
+let f x y z = y + z - x;;
+val f : int -> int -> int -> int = <fun>
+f 1 2 3;;
+- : int = 4`)}${box('n','Stratégie d'+"'évaluation",`<p>OCaml procède par défaut par <b>passage par valeur</b> (arguments évalués d'abord), sauf pour <code>&amp;&amp;</code> et <code>||</code> (évaluation <b>paresseuse</b>).</p>`)}`],
+['2.4 Fonctions locales',`<p>Utiles pour les fonctions auxiliaires qui ne servent qu'à une seule fonction.</p>${c(`let triplet_pythagoricien x y z =
+  let carre n = n * n
+  in carre x + carre y = carre z;;
+triplet_pythagoricien 3 4 5;;
+- : bool = true
+carre 5;;
+Error: Unbound value carre`)}`],
+['2.5 Structures conditionnelles',`<p><code>if &lt;e1&gt; then &lt;e2&gt; else &lt;e3&gt;</code> : <code>e1</code> est un <code>bool</code>, et <code>e2</code>, <code>e3</code> ont le même type (celui du <code>if</code>). Sans <code>else</code>, <code>e2</code> doit être de type <code>unit</code>.</p>${c(`let resultat = if true && false then 1. else 8.;;
+val resultat : float = 8.`)}<p><b>Problème du « dangling else »</b> : avec des <code>if</code> imbriqués, utiliser <code>begin ... end</code> (ou des parenthèses) pour lever l'ambiguïté.</p>${c(`let is_equal a b =
+  if a = b then print_endline "Equal"
+  else begin
+    print_string "Not Equal: ";
+    print_int a; print_string " and "; print_int b;
+    print_newline ()
+  end;;
+val is_equal : int -> int -> unit = <fun>`)}`],
+['2.6 Polymorphisme paramétrique',`<p>Quand rien ne contraint un type, OCaml utilise des variables de type <code>'a</code>, <code>'b</code>… : n'importe quel type convient. Un même nom désigne un même type.</p>${c(`(=);;
+- : 'a -> 'a -> bool = <fun>
+let if_then_else b x y = if b then x else y;;
+val if_then_else : bool -> 'a -> 'a -> 'a = <fun>
+let first x y = x;;
+val first : 'a -> 'b -> 'a = <fun>
+let second x y = y;;
+val second : 'a -> 'b -> 'b = <fun>`)}`],
+['2.7 Ordre supérieur et fonctions anonymes',`<p>Les fonctions sont des <b>citoyens de première classe</b> : on peut les lier, les renvoyer ou les passer en argument. Une fonction qui prend ou renvoie une fonction est dite d'<b>ordre supérieur</b>. Les signatures correspondantes contiennent des parenthèses.</p>${c(`let evalue_en_0 f = f 0;;
+val evalue_en_0 : (int -> 'a) -> 'a = <fun>
+let h x y = ('A' < x) && (y x);;
+val h : char -> (char -> bool) -> bool = <fun>`)}${box('n','Curryfication',`<p><code>-&gt;</code> est associatif à droite : <code>(+) : int -&gt; (int -&gt; int)</code>. Une fonction à plusieurs paramètres est en fait une fonction à un paramètre qui renvoie une fonction, d'où l'<b>application partielle</b>.</p>${c(`let plus x y = x + y;;
+let ajoute3 = plus 3;;
+val ajoute3 : int -> int = <fun>
+ajoute3 22;;
+- : int = 25`)}`)}<p>Une fonction est <b>anonyme</b> si elle n'est liée à aucun identifiant (mot-clé <code>fun</code>). Équivalent Python : <code>lambda</code>.</p>${c(`(fun x -> x + 1) 3;;
+- : int = 4
+fun x y -> x*x + y*y;;      (* = fun x -> fun y -> ... *)
+- : int -> int -> int = <fun>
+let apply f x = f x;;
+val apply : ('a -> 'b) -> 'a -> 'b = <fun>
+let compose g f = fun x -> g (f x);;
+val compose : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b = <fun>
+compose (fun x -> x*x) (fun x -> x+2) 2;;
+- : int = 16`)}`],
+['2.8 Programmation purement fonctionnelle',`<p>Fonctions de première classe et ordre supérieur caractérisent les langages <b>fonctionnels</b> : on compose des fonctions comme en mathématiques, en se concentrant sur le résultat voulu plutôt que sur la façon de le construire (<b>modularité</b>). Structure typique : déclarations de fonctions globales, puis <code>let () = ...</code> comme point d'entrée.</p>${box('n','Pureté',`<p>Une expression est <b>pure</b> si l'évaluer plusieurs fois ne modifie pas sa valeur de retour. Une expression pure sans effet de bord peut être remplacée par sa valeur : c'est la <b>transparence référentielle</b>, qui simplifie les preuves sur les programmes.</p>`)}`]
+]],
+['3 · Récursivité',[
+['3.1 Fonctions récursives',`<p>Puisque les variables sont immuables, on remplace les boucles par la récursivité. Une fonction est <b>récursive</b> si sa déclaration contient un appel à elle-même, et doit avoir au moins un <b>cas de base</b> (qui termine) et un <b>cas récursif</b> (sur des arguments plus petits). En OCaml : <code>let rec</code>.</p>${c(`let rec factorielle n =
+  if n = 0 then 1                      (* cas de base *)
+  else n * factorielle (n-1);;         (* cas récursif *)
+val factorielle : int -> int = <fun>`)}${box('t','Écrire une fonction récursive',`<p>1) Cas de base : valeur directe. 2) Cas récursif : identifier ce que renvoie l'appel sur un argument plus petit, puis en déduire le résultat voulu. 3) Vérifier que tout appel finit par atteindre un cas de base (<b>terminaison</b>).</p>`)}${c(`(* applique n fois f *)
+let rec applique_n f n =
+  if n = 0 then (fun x -> x)
+  else (fun x -> f (applique_n f (n-1) x));;
+
+(* x^n par exponentiation rapide *)
+let rec puissance x n =
+  if n = 0 then 1
+  else let v = puissance x (n/2) in
+       if n mod 2 = 0 then v * v else x * v * v;;
+
+(* n est-il une puissance de 2 ? *)
+let rec est_puissance2 n =
+  if n = 0 then false
+  else if n = 1 then true
+  else if n mod 2 = 1 then false
+  else est_puissance2 (n/2);;`)}`],
+['3.2 Arbre des appels récursifs',`<p>Exemple : Fibonacci, avec <code>u₀ = u₁ = 1</code> et <code>uₙ = uₙ₋₁ + uₙ₋₂</code> pour <code>n ≥ 2</code>. L'arbre des appels de <code>fibo 4</code> montre que les mêmes calculs sont refaits plusieurs fois : le coût est exponentiel.</p>${c(`let rec fibo n =
+  if n = 0 || n = 1 then 1
+  else fibo (n-1) + fibo (n-2);;`)}`],
+['3.3 Filtrage',`<p>Le <b>filtrage par motif</b> compare une valeur à une suite de motifs <code>| &lt;motif&gt; -&gt; &lt;expr&gt;</code>, dans l'ordre ; la première correspondance est évaluée. Le motif universel <code>_</code> accepte tout sans lier de nom. <code>function</code> filtre implicitement le dernier argument. Une garde <code>when</code> ajoute une condition ; <code>0 | 1</code> combine deux motifs.</p>${c(`let rec factorielle n = match n with
+  | 0 -> 1
+  | _ -> n * factorielle (n-1);;
+
+let rec factorielle = function
+  | 0 | 1 -> 1
+  | n when n > 0 -> n * factorielle (n-1)
+  | _ -> -1;;`)}${box('w','Bonnes pratiques',`<p>OCaml avertit (« not exhaustive ») si un filtrage peut échouer à l'exécution : terminer par le motif universel. Tous les motifs ont le type de l'expression filtrée, et toutes les branches ont le même type.</p>`)}`],
+['3.4 Récursivité croisée',`<p>Des définitions sont <b>mutuellement récursives</b> si chacune dépend de l'autre. Le mot-clé <code>and</code> les regroupe en une seule déclaration (avec <code>let rec</code>). Exemple : <code>u₀ = v₀ = 1</code>, <code>uₙ = 2uₙ₋₁ + vₙ₋₁ + 4</code>, <code>vₙ = uₙ₋₁ − vₙ₋₁ + 3</code>.</p>${c(`let rec u n = match n with
+  | 0 -> 1
+  | _ -> 2 * u (n-1) + v (n-1) + 4
+and v n = match n with
+  | 0 -> 1
+  | _ -> u (n-1) - v (n-1) + 3;;
+val u : int -> int = <fun>
+val v : int -> int = <fun>`)}<p><code>and</code> sert aussi à des liaisons simultanées : <code>let x = 1 and y = 2 in ...</code></p>`],
+['3.5 Listes chaînées',`<p>Une liste est soit vide (<code>[]</code>), soit un élément de tête <code>t</code> suivi d'une queue <code>q</code> : <code>t::q</code>. Le type <code>'a list</code> est <b>homogène</b>. <code>[1;5;10]</code> est un raccourci pour <code>1::5::10::[]</code>. Les listes sont immuables : toute fonction renvoyant une liste en crée une nouvelle. On les manipule par fonctions récursives et filtrage : cas <code>[]</code> (base) et cas <code>t::q</code> (récursif).</p>${c(`let l1 = [1; 5; 10; 7];;
+let l2 = 3::l1;;     val l2 : int list = [3; 1; 5; 10; 7]
+let l3 = 'c'::l1;;
+Error: This expression has type int list but an expression was expected of type char list
+let l4 = l1::l2::[];;  (* int list list *)
+
+(* motifs : [] vide ; t::q non vide ; [x] ; x::y::[] ou [x;y] ; x::y::_ ≥ 2 éléments *)
+let rec longueur l = match l with
+  | [] -> 0
+  | t::q -> 1 + longueur q;;
+
+let rec filtre_pairs l = match l with
+  | [] -> []
+  | t::q when t mod 2 = 0 -> t :: filtre_pairs q
+  | _::q -> filtre_pairs q;;
+
+let rec concatene l1 l2 = match l1 with
+  | [] -> l2
+  | t::q -> t :: concatene q l2;;
+
+let rec nb_occurrences l elem = match l with
+  | [] -> 0
+  | t::q when t = elem -> 1 + nb_occurrences q elem
+  | _::q -> nb_occurrences q elem;;
+
+let rec miroir l = match l with
+  | [] -> []
+  | t::q -> (miroir q) @ [t];;`)}${box('n','Coût de miroir',`<p>Il y a n appels à <code>@</code>, dont la liste de gauche (<code>miroir q</code>) a pour longueur 0, 1, …, n−1 : coût exact Σᵢ i = n(n−1)/2, donc <b>quadratique</b>. Rappel : <code>(@) : 'a list -&gt; 'a list -&gt; 'a list</code> et <code>(::) : 'a -&gt; 'a list -&gt; 'a list</code>.</p>`)}`],
+['3.6 Récursivité terminale',`<p>La récursivité coûte de l'espace dans la pile d'appels (proportionnel à la taille de la liste pour <code>longueur</code>). Un appel est <b>terminal</b> s'il est la dernière expression évaluée du corps ; une fonction est <b>récursive terminale</b> si tous ses appels récursifs le sont : OCaml l'optimise et ne consomme alors plus de pile. On ajoute un <b>accumulateur</b> via une fonction auxiliaire.</p>${c(`let longueur l =
+  let rec longueur_avec_acc liste acc =   (* longueur de liste + acc *)
+    match liste with
+    | [] -> acc
+    | _::q -> longueur_avec_acc q (acc + 1)
+  in longueur_avec_acc l 0;;
+
+let miroir l =                             (* complexité linéaire *)
+  let rec aux l acc = match l with
+    | [] -> acc
+    | t::q -> aux q (t::acc)
+  in aux l [];;`)}<p><code>List.length</code> est récursive terminale ; <code>List.concat</code> (et <code>@</code>) ne l'est pas.</p>`]
+]],
+['4 · Nouveaux types',[
+['4.1 Tuples',`<p>Un type <b>produit</b> regroupe des valeurs de types différents (<b>n-uplets</b>). Éléments séparés par des virgules, type formé avec des étoiles <code>*</code> ; les parenthèses sont facultatives. On déconstruit avec un <code>let</code> ou un filtrage.</p>${c(`let tuple = (1, ("ha", 3.14), true);;
+val tuple : int * (string * float) * bool = ...
+let (x, (_, z), _) = (1, (true, "hello"), 3.4);;   (* x : int, z : float *)
+let second tuple = match tuple with | _,y -> y;;
+val second : 'a * 'b -> 'b = <fun>`)}`],
+['4.2 Enregistrements',`<p>Un type <b>structuré</b> est un ensemble de champs nommés et typés. Champs immuables par défaut ; <code>mutable</code> les rend modifiables, avec <code>&lt;-</code>.</p>${c(`type point = { x : int; y : int };;
+let p = {x = 1; y = 2};;
+val p : point = {x = 1; y = 2}
+p.y;;  - : int = 2
+
+type point_colore = { x : int; y : int; mutable color : string };;
+let p2 = {x = 1; y = 2; color = "Rouge"};;
+p2.color <- "Bleu";;  - : unit = ()
+p2.color;;  - : string = "Bleu"
+p2.x <- 3;;
+Error: The record field x is not mutable`)}`],
+['4.3 Types sommes',`<p>Un type <b>somme</b> est défini par un choix fini de <b>constructeurs</b>, toujours commençant par une majuscule. Le filtrage s'y applique naturellement. Un constructeur peut porter une valeur : <code>Constructeur of type</code>.</p>${c(`type notes = Do | Re | Mi | Fa | Sol | La | Si;;
+type int_liste = Vide | Cons of int * int_liste;;
+let rec longueur l = match l with
+  | Vide -> 0
+  | Cons (_, q) -> 1 + longueur q;;
+
+type resultat = OK of int | Erreur;;
+let division x y = match y with
+  | 0. -> Erreur
+  | _ -> OK (x /. y);;`)}${box('n',`Le type 'a option`,`<p>Déjà fourni : <code>type 'a option = Some of 'a | None</code>.</p>${c(`let extrait x = match x with
+  | None -> -1
+  | Some n -> n;;`)}`)}<p>Exemple : expressions arithmétiques.</p>${c(`type expr = Zero | Entier of int | Plus of expr * expr | Mult of expr * expr;;
+let e = Mult (Plus (Entier 1, Entier 2), Plus (Entier 3, Zero));;   (* (1+2)*(3+0) *)
+let rec evalue = function
+  | Zero -> 0
+  | Entier n -> n
+  | Plus (e1, e2) -> evalue e1 + evalue e2
+  | Mult (e1, e2) -> evalue e1 * evalue e2;;`)}`],
+['4.4 Exceptions',`<p>On déclare ses exceptions avec <code>exception</code> (constructeur à majuscule, éventuellement porteur d'une valeur) et on les lève avec <code>raise</code>. Une exception peut être <b>rattrapée</b> avec <code>try ... with</code> : le programme reprend alors un flot normal.</p>${c(`exception Liste_vide;;
+let tete l = match l with
+  | [] -> raise Liste_vide
+  | t::_ -> t;;
+
+let dernier l = (* variante avec exception prédéfinie *)
+  let rec aux = function
+    | [] -> raise (Failure "Liste vide")
+    | [x] -> x
+    | _::q -> aux q
+  in aux l;;
+
+try tete [] with Liste_vide -> -1;;
+- : int = -1`)}${box('n','Les assertions',`<p><code>assert &lt;expr&gt;</code> renvoie <code>()</code> si l'expression vaut <code>true</code>, et lève <code>Assert_failure</code> sinon. Elles vérifient des conditions à un moment précis ; on ne les rattrape pas en général.</p>${c(`let rec factorielle n = assert (n >= 0);
+  match n with
+  | 0 -> 1
+  | _ -> n * factorielle (n-1);;`)}`)}`]
+]],
+['5 · Aspects impératifs',[
+['5.1 Références',`<p>Une <b>référence</b> est une variable mutable : <code>ref v</code> a le type <code>'a ref</code>, défini par <code>type 'a ref = {mutable contents : 'a}</code>. On lit avec <code>!</code>, on modifie avec <code>:=</code>.</p>${c(`let p = ref 0;;
+val p : int ref = {contents = 0}
+!p;;  - : int = 0
+p := !p + 1;;  - : unit = ()
+p;;  - : int ref = {contents = 1}
+!p;;  - : int = 1`)}${box('n','Deux égalités',`<p><code>=</code> (<b>logique</b>) compare le contenu ; <code>==</code> (<b>physique</b>) compare les adresses. Attention à ne pas utiliser <code>==</code> à la place de <code>=</code>.</p>${c(`let p1 = ref 5;; let p2 = ref 5;;
+p1 = p2;;   - : bool = true
+p1 == p2;;  - : bool = false`)}`)}${box('w','Pour aller plus loin : polymorphisme et mutabilité',`<p><code>let l = ref []</code> ne peut pas avoir le type <code>'a list ref</code> (on pourrait y mettre des types différents). OCaml utilise un type <b>faible</b> : <code>'_weak1 list ref</code>, remplacé dès que le type est connu.</p>`)}`],
+['5.2 Boucles',`<p><code>for i = a to b do &lt;expr&gt; done</code> exécute le corps <code>b − a + 1</code> fois (bornes <b>incluses</b>, contrairement à Python). <code>downto</code> décroît. <code>while &lt;test&gt; do &lt;expr&gt; done</code> boucle tant que le test est vrai : le test doit dépendre de valeurs mutables modifiées par le corps (références), sinon la boucle ne termine pas.</p>${c(`let somme n =
+  let s = ref 0 in
+  for i = 1 to n do s := !s + i done;
+  !s;;
+
+for i = 10 downto 0 do
+  if i mod 2 = 0 then begin
+    print_int i; print_newline ()
+  end
+done;;
+
+let pn n =   (* 1 + 0,5 + ... + 0,5^n *)
+  let s = ref 0. in
+  for i = 0 to n do s := !s +. 0.5 ** float_of_int i done;
+  !s;;
+
+let compte_vol u0 =   (* Syracuse : plus petit n tel que u_n = 1 *)
+  assert (u0 > 0);
+  let un = ref u0 and n = ref 0 in
+  while !un > 1 do
+    if !un mod 2 = 0 then un := !un / 2 else un := !un * 3 + 1;
+    incr n
+  done; !n;;`)}${box('w','Typage d'+"'une boucle",`<p>Une boucle est toujours de type <code>unit</code>, et son corps doit aussi typer <code>unit</code>. Pour exploiter un résultat, on le stocke dans une référence. On utilise <code>for</code> quand le nombre d'itérations est connu à l'avance, <code>while</code> sinon.</p>`)}`],
+['5.3 Tableaux',`<p><code>'a array</code> : éléments de même type, notation <code>[|x1; ...; xn|]</code>, taille fixée à la création. Accès <code>t.(i)</code> (indices de 0 à taille−1), modification <b>en place</b> avec <code>t.(i) &lt;- v</code>, <code>Array.length t</code>. Pour agrandir, il faut créer un nouveau tableau.</p>${c(`let t1 = [|1;2;3|];;
+t1.(0);;  - : int = 1
+Array.length t1;;  - : int = 3
+t1.(3);;
+Exception: Invalid_argument "index out of bounds".
+t1.(0) <- 37;;  - : unit = ()
+t1;;  - : int array = [|37; 2; 3|]`)}<table><tr><th></th><th>Listes</th><th>Tableaux</th></tr><tr><td>Mémoire</td><td>cellules chaînées par des pointeurs</td><td>cases contiguës</td></tr><tr><td>Accéder à un élément</td><td>facile à la tête, sinon il faut parcourir</td><td>facile : <code>t.(i)</code></td></tr><tr><td>Ajouter un élément</td><td>facile en tête, plus dur sinon</td><td>impossible, il faut en créer un nouveau</td></tr><tr><td>Modifier</td><td>impossible (immuable)</td><td><code>t.(i) &lt;- x</code> (cases mutables)</td></tr></table><p><code>Array.make n x</code> crée <code>n</code> copies <b>physiques</b> de <code>x</code> ; <code>Array.copy</code> copie ; <code>Array.make_matrix</code> crée une matrice. Attention aux copies physiques si <code>x</code> est mutable :</p>${c(`let m = Array.make 2 (Array.make 3 0);;
+m.(0).(0) <- 1;;
+m;;  - : int array array = [|[|1; 0; 0|]; [|1; 0; 0|]|]   (* les deux lignes sont la même ! *)
+
+let mat = Array.make 2 [||];;      (* 2 lignes, 3 colonnes, sans make_matrix *)
+for i = 0 to Array.length mat - 1 do mat.(i) <- Array.make 3 0 done;;
+let mat = Array.make_matrix 2 3 0;;`)}<p>Indice de la première valeur <code>true</code> d'un tableau (ou −1) :</p>${c(`let indice_premier_true tab =        (* version while *)
+  let m = Array.length tab and i = ref 0 in
+  while !i < m && not tab.(!i) do incr i done;
+  if !i = m then -1 else !i;;
+
+exception Trouve of int;;              (* version for + exception *)
+let indice_premier_true tab =
+  try
+    for i = 0 to Array.length tab - 1 do
+      if tab.(i) then raise (Trouve i)
+    done; (-1)
+  with Trouve i -> i;;`)}`]
+]],
+['6 · Modules et compilation',[
+['6 Modules',`<p>Chaque morceau de code est encapsulé dans un <b>module</b>. Un fichier <code>hello.ml</code> définit un module <code>Hello</code>. Pour appeler sa fonction <code>foo</code> ailleurs : <code>Hello.foo</code> (comme <code>Array.length</code>), ou <code>open Hello</code> en début de fichier (risque de collisions de noms). Par défaut tout est public. Un module a une <b>implémentation</b> (<code>.ml</code>) et une <b>interface</b> (<code>.mli</code>), qui regroupe les déclarations publiques ; on la génère avec <code>ocamlc -i fichier.ml &gt; fichier.mli</code>.</p>${c(`(* hello.ml *)
+let message = "Hello there"
+let hello () = print_endline message
+
+(* hello.mli *)
+val message : string
+val hello : unit -> unit
+(** [hello ()] affiche un message de bienvenue. *)`)}`],
+['Compilation',`<p><b>Compiler</b> un fichier <code>.ml</code> le traduit en <b>langage objet</b> ; cela ne l'exécute pas. <code>ocamlc</code> produit du code-octet (<i>bytecode</i>, interprété à l'exécution) ; <code>ocamlopt</code> du code natif, plus rapide. En MPI, tout code doit être compilé puis exécuté.</p>${c(`ocamlc hello.ml -o hello      # ou : ocamlopt hello.ml -o hello
+./hello
+ocamlc unix.cma hello.ml -o hello   # avec une bibliothèque`)}${box('w','Attention',`<p><code>ocamlc</code> utilise des bibliothèques <code>.cma</code>, <code>ocamlopt</code> des <code>.cmxa</code> (on ne mélange pas). L'ordre des fichiers sur la ligne de commande compte : lecture de gauche à droite.</p>`)}<table><tr><th>Extension</th><th>Signification</th></tr><tr><td><code>.ml</code> / <code>.mli</code></td><td>source / interface</td></tr><tr><td><code>.cmo</code> / <code>.cma</code></td><td>objet / bibliothèque (code-octet)</td></tr><tr><td><code>.cmx</code> / <code>.cmxa</code></td><td>objet / bibliothèque (code natif)</td></tr><tr><td><code>.cmi</code></td><td>interface compilée</td></tr></table>`]
+]]
+];
+/* ===== Mini-interpréteur OCaml (sous-ensemble du cours) ===== */
+class F{constructor(v){this.v=v}}class Ch{constructor(c){this.c=c}}class Tu{constructor(v){this.v=v}}
+class Cn{constructor(n,a){this.n=n;this.a=a}}class Rc{constructor(t,f){this.t=t;this.f=f}}class Ar{constructor(a){this.a=a}}
+class OErr extends Error{constructor(v){super('exn');this.v=v}}class SErr extends Error{}class TErr extends Error{}
+const U={u:1};
+const KWS=new Set('let rec in and if then else match with function fun type of when begin end for to downto do done while try exception mutable open'.split(' '));
+const OPW=new Set(['mod','land','lor','lxor','lsl','lsr']);
+const MODS=/^(?:List|Array|String|Char)\.[a-z_][\w']*/;
+const OPS=/^(?:\[\||\|\]|;;|::|->|<-|:=|&&|\|\||<>|<=|>=|==|!=|\*\*|[-+*\/]\.|[-+*\/=<>@^!:;,.|(){}\[\]'~?%&$#])/;
+const unesc=s=>s.replace(/\\(n|t|r|b|\\|"|'|\d{3})/g,(m,c)=>c=='n'?'\n':c=='t'?'\t':c=='r'?'\r':c=='b'?'\b':/\d/.test(c)?String.fromCharCode(+c):c);
+function lex(s){const t=[];let i=0,m;
+while(i<s.length){const r=s.slice(i);
+if(m=/^\s+/.exec(r)){i+=m[0].length;continue}
+if(r.startsWith('(*')){let d=0,j=i;do{if(s.startsWith('(*',j)){d++;j+=2}else if(s.startsWith('*)',j)){d--;j+=2}else j++}while(d>0&&j<s.length);i=j;continue}
+if(m=/^(?:\d[\d_]*\.[\d_]*(?:[eE][+-]?\d+)?|\d+[eE][+-]?\d+)/.exec(r))t.push({k:'f',v:parseFloat(m[0].replace(/_/g,''))});
+else if(m=/^\d[\d_]*/.exec(r))t.push({k:'i',v:parseInt(m[0].replace(/_/g,''))});
+else if(m=/^"((?:\\[\s\S]|[^"\\])*)"/.exec(r))t.push({k:'s',v:unesc(m[1])});
+else if(m=/^'(\\[\s\S]|[^\\'])'/.exec(r))t.push({k:'c',v:unesc(m[1])});
+else if(m=MODS.exec(r))t.push({k:'id',v:m[0]});
+else if(m=/^[a-z_][\w']*/.exec(r)){const w=m[0];t.push(KWS.has(w)?{k:'kw',v:w}:OPW.has(w)?{k:'op',v:w}:{k:'id',v:w})}
+else if(m=/^[A-Z][\w']*/.exec(r))t.push({k:'u',v:m[0]});
+else if(m=OPS.exec(r))t.push({k:'op',v:m[0]});
+else throw new SErr("Error: Syntax error : caractère inattendu « "+r[0]+" »");
+i+=m[0].length}
+return t}
+const BIN={':=':[1,1],'<-':[1,1],',':[2,0],'||':[3,1],'&&':[4,1],'=':[5,0],'<':[5,0],'>':[5,0],'<>':[5,0],'<=':[5,0],'>=':[5,0],'==':[5,0],'!=':[5,0],'@':[6,1],'^':[6,1],'::':[7,1],'+':[8,0],'-':[8,0],'+.':[8,0],'-.':[8,0],'*':[9,0],'/':[9,0],'*.':[9,0],'/.':[9,0],'mod':[9,0],'land':[9,0],'lor':[9,0],'lxor':[9,0],'lsl':[10,1],'lsr':[10,1],'**':[10,1]};
+function parse(src){const T=lex(src);let p=0;
+const pk=(o=0)=>T[p+o]||{k:'eof'},nx=()=>T[p++]||{k:'eof'};
+const is=(k,v,o=0)=>{const t=pk(o);return t.k==k&&(v===undefined||t.v===v)},op=v=>is('op',v),kw=v=>is('kw',v);
+const eat=(k,v)=>{if(is(k,v)){p++;return true}return false};
+const err=()=>{throw new SErr("Error: Syntax error"+(pk().v!==undefined?" près de « "+pk().v+" »":" (fin inattendue)"))};
+const ex=(k,v)=>{if(!eat(k,v))err()};
+const TOP=['let','type','exception','open'];
+const skipTy=(st=[])=>{let d=0;for(;;){const t=pk();if(t.k=='eof')return;if(t.k=='op'){if(['(','[','{'].includes(t.v))d++;else if([')',']','}'].includes(t.v)){if(d==0)return;d--}else if(d==0&&(t.v==';;'||st.includes(t.v)))return}else if(d==0&&t.k=='kw'&&(TOP.includes(t.v)||st.includes(t.v)))return;p++}};
+const pat=()=>{let a=pTup();while(op('|')){p++;a={t:'por',a,b:pTup()}}return a};
+const pTup=()=>{let a=pCons();if(op(',')){const l=[a];while(eat('op',','))l.push(pCons());a={t:'ptup',l}}return a};
+const pCons=()=>{const a=pApp();if(op('::')){p++;return{t:'pcons',h:a,tl:pCons()}}return a};
+const pStart=()=>is('id')||is('i')||is('f')||is('s')||is('c')||is('u')||op('(')||op('[');
+const pApp=()=>{if(is('u')){const n=nx().v;return pStart()?{t:'pcon',n,a:pAtom()}:{t:'pcon',n}}return pAtom()};
+const pAtom=()=>{const t=nx();
+if(t.k=='id'){if(t.v=='_')return{t:'pany'};if(t.v=='true'||t.v=='false')return{t:'plit',v:t.v=='true'};return{t:'pvar',n:t.v}}
+if(t.k=='i'||t.k=='s')return{t:'plit',v:t.v};if(t.k=='f')return{t:'plit',v:new F(t.v)};if(t.k=='c')return{t:'plit',v:new Ch(t.v)};
+if(t.k=='u')return{t:'pcon',n:t.v};
+if(t.k=='op'&&t.v=='-'){const n=nx();return{t:'plit',v:n.k=='f'?new F(-n.v):-n.v}}
+if(t.k=='op'&&t.v=='('){if(eat('op',')'))return{t:'plit',v:U};const a=pat();if(eat('op',':'))skipTy();ex('op',')');return a}
+if(t.k=='op'&&t.v=='['){const l=[];if(!eat('op',']')){do{if(op(']'))break;l.push(pat())}while(eat('op',';'));ex('op',']')}return l.reduceRight((tl,h)=>({t:'pcons',h,tl}),{t:'pnil'})}
+p--;err()};
+const mk=(o,a,b)=>o==':='?{t:'asg',a,b}:o=='<-'?(a.t=='idx'?{t:'aset',a:a.a,i:a.i,v:b}:a.t=='fld'?{t:'fset',a:a.a,n:a.n,v:b}:err()):o=='::'?{t:'cons',a,b}:o=='&&'?{t:'and',a,b}:o=='||'?{t:'or',a,b}:{t:'bop',o,a,b};
+const bin=min=>{let l=un();for(;;){const t=pk();if(t.k!='op')break;const o=BIN[t.v];if(!o||o[0]<min)break;p++;
+if(t.v==','){const l2=[l,bin(3)];while(eat('op',','))l2.push(bin(3));l={t:'tup',l:l2};continue}
+l=mk(t.v,l,bin(o[1]?o[0]:o[0]+1))}return l};
+const arms=()=>{eat('op','|');const l=[];do{const q=pat();let g=null;if(eat('kw','when'))g=bin(1);ex('op','->');l.push({p:q,g,b:seq()})}while(eat('op','|'));return l};
+const letB=()=>{const rec=eat('kw','rec'),bs=[];do{let q,e;
+if(is('id')&&pk().v!='_'){const n=nx().v;q={t:'pvar',n};const ps=[];
+while(!op('=')&&!op(':')&&!is('eof'))ps.push(pAtom());
+if(eat('op',':'))skipTy(['=']);ex('op','=');e=ps.reduceRight((b,x)=>({t:'fun',p:x,b}),seq())}
+else{q=pat();ex('op','=');e=seq()}
+bs.push({p:q,e})}while(eat('kw','and'));return{rec,bs}};
+const un=()=>{
+if(is('kw')){const w=pk().v;
+if(w=='if'){p++;const c=bin(1);ex('kw','then');const a=bin(1);let b=null;if(eat('kw','else'))b=bin(1);return{t:'if',c,a,b}}
+if(w=='match'){p++;const e=seq();ex('kw','with');return{t:'match',e,arms:arms()}}
+if(w=='function'){p++;return{t:'fun',p:{t:'pvar',n:'$a'},b:{t:'match',e:{t:'var',n:'$a'},arms:arms()}}}
+if(w=='fun'){p++;const ps=[];while(!op('->'))ps.push(pAtom());p++;return ps.reduceRight((b,x)=>({t:'fun',p:x,b}),seq())}
+if(w=='try'){p++;const e=seq();ex('kw','with');return{t:'try',e,arms:arms()}}
+if(w=='let'){p++;const d=letB();ex('kw','in');return{t:'let',rec:d.rec,bs:d.bs,b:seq()}}
+if(w=='for'){p++;const v=nx().v;ex('op','=');const lo=bin(1),dn=nx().v=='downto',hi=bin(1);ex('kw','do');const b=seq();ex('kw','done');return{t:'for',v,lo,hi,dn,b}}
+if(w=='while'){p++;const c=bin(1);ex('kw','do');const b=seq();ex('kw','done');return{t:'while',c,b}}}
+if(op('-')||op('-.')){const o=nx().v;return{t:'neg',o,e:app()}}
+return app()};
+const aStart=()=>{const t=pk();return['i','f','s','c','id','u'].includes(t.k)||(t.k=='op'&&['(','[','[|','{','!'].includes(t.v))};
+const app=()=>{let f=post();if(f.t=='con'){return aStart()?{t:'conapp',n:f.n,a:post()}:f}
+while(aStart())f={t:'app',f,a:post()};return f};
+const post=()=>{let a=atom();for(;;){if(op('.')){
+if(is('op','(',1)){p+=2;const i=seq();ex('op',')');a={t:'idx',a,i}}
+else if(is('op','[',1)){p+=2;const i=seq();ex('op',']');a={t:'sidx',a,i}}
+else if(is('id',undefined,1)){p++;a={t:'fld',a,n:nx().v}}else break}else break}return a};
+const list=close=>{const l=[];if(!eat('op',close)){do{if(op(close))break;l.push(bin(3))}while(eat('op',';'));ex('op',close)}return l};
+const atom=()=>{const t=nx();
+switch(t.k){case'i':case's':return{t:'lit',v:t.v};case'f':return{t:'lit',v:new F(t.v)};case'c':return{t:'lit',v:new Ch(t.v)};
+case'id':return{t:'var',n:t.v};case'u':return{t:'con',n:t.v};
+case'kw':if(t.v=='begin'){const e=seq();ex('kw','end');return e}break;
+case'op':
+if(t.v=='!')return{t:'deref',e:post()};
+if(t.v=='('){if(eat('op',')'))return{t:'lit',v:U};
+const n=pk();if(n.k=='op'&&is('op',')',1)&&!['(','['].includes(n.v)){p+=2;return{t:'var',n:'('+n.v+')'}}
+const e=seq();if(eat('op',':'))skipTy();ex('op',')');return e}
+if(t.v=='[')return{t:'list',l:list(']')};
+if(t.v=='[|')return{t:'arr',l:list('|]')};
+if(t.v=='{'){const fs=[];do{if(op('}'))break;const n=nx().v;ex('op','=');fs.push([n,bin(3)])}while(eat('op',';'));ex('op','}');return{t:'rec',fs}}}
+p--;err()};
+const xs=()=>{const t=pk();return['i','f','s','c','id','u'].includes(t.k)||(t.k=='kw'&&['let','if','match','fun','function','try','for','while','begin'].includes(t.v))||(t.k=='op'&&['(','[','[|','{','!','-','-.'].includes(t.v))};
+function seq(){let a=bin(1);while(op(';')){p++;if(!xs())break;a={t:'seq',a,b:bin(1)}}return a}
+const phrase=()=>{
+if(kw('let')){const s=p;p++;const d=letB();if(kw('in')){p=s;return{t:'expr',e:seq()}}return{t:'decl',rec:d.rec,bs:d.bs}}
+if(kw('type')){p++;while(!op('=')&&!is('eof'))p++;const n=T[p-1].v;ex('op','=');const ctors=[],fields=[];
+if(eat('op','{')){do{if(op('}'))break;const m=eat('kw','mutable');fields.push([nx().v,m]);ex('op',':');skipTy([';'])}while(eat('op',';'));ex('op','}')}
+else{eat('op','|');if(is('u')){do{const c=nx().v;const h=eat('kw','of');if(h)skipTy(['|']);ctors.push([c,h])}while(eat('op','|'))}else skipTy()}
+return{t:'type',n,ctors,fields}}
+if(kw('exception')){p++;const n=nx().v;const h=eat('kw','of');if(h)skipTy();return{t:'exn',n,h}}
+if(kw('open')){p++;nx();return{t:'nop'}}
+return{t:'expr',e:seq()}};
+const r=[];
+try{while(!is('eof')){if(eat('op',';;'))continue;r.push(phrase());if(!is('eof')&&!op(';;')&&!(kw('let')||kw('type')||kw('exception')||kw('open')))err()}}
+catch(x){if(!(x instanceof SErr))throw x;r.push({t:'err',m:x.message})}
+return r}
+/* ----- évaluation ----- */
+let S,steps=0;const PRIM=new Set(['int','float','bool','string','char','unit']);
+const exn=(n,a)=>new OErr(new Cn(n,a));
+const tyErr=(x,e)=>new SErr('Error: This expression has type '+tname(x)+' but an expression was expected of type '+e);
+const I=x=>{if(typeof x!='number')throw tyErr(x,'int');return x};
+const Fl=x=>{if(!(x instanceof F))throw tyErr(x,'float');return x.v};
+const call=(f,a)=>{if(typeof f!='function')throw new SErr('Error: This expression is not a function; it cannot be applied');return f(a)};
+function eq(a,b){if(a===b)return true;
+if(a instanceof F)return b instanceof F&&a.v===b.v;if(a instanceof Ch)return b instanceof Ch&&a.c===b.c;
+if(Array.isArray(a))return Array.isArray(b)&&a.length==b.length&&a.every((x,i)=>eq(x,b[i]));
+if(a instanceof Tu)return a.v.every((x,i)=>eq(x,b.v[i]));
+if(a instanceof Cn)return b instanceof Cn&&a.n==b.n&&(a.a===undefined?b.a===undefined:eq(a.a,b.a));
+if(a instanceof Ar)return b instanceof Ar&&a.a.length==b.a.length&&a.a.every((x,i)=>eq(x,b.a[i]));
+if(a instanceof Rc)return Object.keys(a.f).every(k=>eq(a.f[k],b.f[k]));
+if(typeof a=='function')throw exn('Invalid_argument','compare: functional value');
+return false}
+function cmp(a,b){if(a instanceof F||a instanceof Ch){a=a.v??a.c;b=b.v??b.c}
+if(typeof a=='number'||typeof a=='string'||typeof a=='boolean')return a<b?-1:a>b?1:0;
+if(Array.isArray(a)){for(let i=0;i<Math.min(a.length,b.length);i++){const c=cmp(a[i],b[i]);if(c)return c}return a.length-b.length}
+if(a instanceof Tu){for(let i=0;i<a.v.length;i++){const c=cmp(a.v[i],b.v[i]);if(c)return c}}return 0}
+function bop(o,a,b){switch(o){
+case'+':return I(a)+I(b);case'-':return I(a)-I(b);case'*':return I(a)*I(b);
+case'/':case'mod':{const x=I(a),y=I(b);if(y===0)throw exn('Division_by_zero');return o=='/'?Math.trunc(x/y):x%y}
+case'+.':return new F(Fl(a)+Fl(b));case'-.':return new F(Fl(a)-Fl(b));case'*.':return new F(Fl(a)*Fl(b));case'/.':return new F(Fl(a)/Fl(b));case'**':return new F(Math.pow(Fl(a),Fl(b)));
+case'^':if(typeof a!='string')throw tyErr(a,'string');if(typeof b!='string')throw tyErr(b,'string');return a+b;
+case'@':return[...a,...b];
+case'=':return eq(a,b);case'<>':return!eq(a,b);case'<':return cmp(a,b)<0;case'>':return cmp(a,b)>0;case'<=':return cmp(a,b)<=0;case'>=':return cmp(a,b)>=0;
+case'==':return a===b;case'!=':return a!==b;
+case'land':return I(a)&I(b);case'lor':return I(a)|I(b);case'lxor':return I(a)^I(b);case'lsl':return I(a)<<I(b);case'lsr':return I(a)>>>I(b)}}
+function bind(q,v,e){switch(q.t){
+case'pvar':e[q.n]=v;return true;case'pany':return true;case'plit':return eq(q.v,v);
+case'ptup':return v instanceof Tu&&q.l.every((x,i)=>bind(x,v.v[i],e));
+case'pnil':return Array.isArray(v)&&v.length==0;
+case'pcons':return Array.isArray(v)&&v.length>0&&bind(q.h,v[0],e)&&bind(q.tl,v.slice(1),e);
+case'pcon':return v instanceof Cn&&v.n==q.n&&(q.a?bind(q.a,v.a,e):true);
+case'por':return bind(q.a,v,e)||bind(q.b,v,e)}return false}
+function ev(n,env){if(++steps>4e6)throw new TErr();
+switch(n.t){
+case'lit':return n.v;
+case'var':if(!(n.n in env))throw new SErr('Error: Unbound value '+n.n);return env[n.n];
+case'con':{const c=S.CT[n.n];if(!c)throw new SErr('Error: Unbound constructor '+n.n);return c.has?(x=>new Cn(n.n,x)):new Cn(n.n)}
+case'conapp':if(!S.CT[n.n])throw new SErr('Error: Unbound constructor '+n.n);return new Cn(n.n,ev(n.a,env));
+case'app':return call(ev(n.f,env),ev(n.a,env));
+case'fun':return x=>{const e=Object.create(env);if(!bind(n.p,x,e))throw exn('Match_failure');return ev(n.b,e)};
+case'let':{const e=Object.create(env);if(n.rec)n.bs.forEach(b=>{e[b.p.n]=ev(b.e,e)});else{const vs=n.bs.map(b=>ev(b.e,env));n.bs.forEach((b,i)=>{if(!bind(b.p,vs[i],e))throw exn('Match_failure')})}return ev(n.b,e)}
+case'if':{const c=ev(n.c,env);if(typeof c!='boolean')throw tyErr(c,'bool');return c?ev(n.a,env):n.b?ev(n.b,env):U}
+case'seq':ev(n.a,env);return ev(n.b,env);
+case'match':{const v=ev(n.e,env);for(const a of n.arms){const e=Object.create(env);if(bind(a.p,v,e)&&(!a.g||ev(a.g,e)===true))return ev(a.b,e)}throw exn('Match_failure')}
+case'try':try{return ev(n.e,env)}catch(x){let v;if(x instanceof OErr)v=x.v;else if(x instanceof RangeError)v=new Cn('Stack_overflow');else throw x;for(const a of n.arms){const e=Object.create(env);if(bind(a.p,v,e)&&(!a.g||ev(a.g,e)===true))return ev(a.b,e)}throw x}
+case'tup':return new Tu(n.l.map(x=>ev(x,env)));case'list':return n.l.map(x=>ev(x,env));case'arr':return new Ar(n.l.map(x=>ev(x,env)));
+case'cons':{const h=ev(n.a,env),t=ev(n.b,env);if(t.length){const a=tname(h),b=tname(t[0]);if(a!=b&&PRIM.has(a)&&PRIM.has(b))throw new SErr('Error: This expression has type '+b+' list but an expression was expected of type '+a+' list')}return[h,...t]}
+case'and':return ev(n.a,env)===true&&ev(n.b,env);case'or':return ev(n.a,env)===true||ev(n.b,env);
+case'neg':{const a=ev(n.e,env);return n.o=='-'?-I(a):new F(-Fl(a))}
+case'bop':return bop(n.o,ev(n.a,env),ev(n.b,env));
+case'asg':{const r=ev(n.a,env);r.f.contents=ev(n.b,env);return U}
+case'deref':return ev(n.e,env).f.contents;
+case'idx':{const a=ev(n.a,env),i=I(ev(n.i,env));if(i<0||i>=a.a.length)throw exn('Invalid_argument','index out of bounds');return a.a[i]}
+case'sidx':{const s=ev(n.a,env),i=I(ev(n.i,env));if(i<0||i>=s.length)throw exn('Invalid_argument','index out of bounds');return new Ch(s[i])}
+case'aset':{const a=ev(n.a,env),i=I(ev(n.i,env)),v=ev(n.v,env);if(i<0||i>=a.a.length)throw exn('Invalid_argument','index out of bounds');a.a[i]=v;return U}
+case'fset':{const r=ev(n.a,env),v=ev(n.v,env),d=S.RT[n.n];if(!d||!d.mut)throw new SErr('Error: The record field '+n.n+' is not mutable');r.f[n.n]=v;return U}
+case'fld':return ev(n.a,env).f[n.n];
+case'rec':{const f={};let t;n.fs.forEach(([k,e])=>{f[k]=ev(e,env);t=t||(S.RT[k]&&S.RT[k].t)});if(!t)throw new SErr('Error: Unbound record field '+n.fs[0][0]);return new Rc(t,f)}
+case'for':{const lo=I(ev(n.lo,env)),hi=I(ev(n.hi,env));if(n.dn)for(let i=lo;i>=hi;i--){const e=Object.create(env);e[n.v]=i;ev(n.b,e)}else for(let i=lo;i<=hi;i++){const e=Object.create(env);e[n.v]=i;ev(n.b,e)}return U}
+case'while':{while(ev(n.c,env)===true)ev(n.b,env);return U}}
+throw new SErr('Error: construction non supportée')}
+/* ----- affichage ----- */
+const fstr=x=>{if(x===Infinity)return'inf';if(x===-Infinity)return'neg_infinity';if(isNaN(x))return'nan';let s=String(x);if(/^-?\d+$/.test(s))s+='.';return s};
+const qs=(s,q)=>q+s.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/\t/g,'\\t').split(q).join('\\'+q)+q;
+function vshow(v){if(typeof v=='number'||typeof v=='boolean')return String(v);if(v===U)return'()';
+if(typeof v=='string')return qs(v,'"');if(v instanceof Ch)return qs(v.c,"'");if(v instanceof F)return fstr(v.v);
+if(Array.isArray(v))return'['+v.map(vshow).join('; ')+']';if(v instanceof Ar)return'[|'+v.a.map(vshow).join('; ')+'|]';
+if(v instanceof Tu)return'('+v.v.map(vshow).join(', ')+')';
+if(v instanceof Cn){if(v.a===undefined)return v.n;const s=vshow(v.a);return v.n+' '+(v.a instanceof Cn&&v.a.a!==undefined||v.a<0||v.a instanceof F&&v.a.v<0?'('+s+')':s)}
+if(v instanceof Rc)return'{'+Object.entries(v.f).map(([k,x])=>k+' = '+vshow(x)).join('; ')+'}';
+return'<fun>'}
+const tn=v=>v instanceof Tu||typeof v=='function'?'('+tname(v)+')':tname(v);
+function tname(v){if(typeof v=='number')return'int';if(typeof v=='boolean')return'bool';if(v===U)return'unit';if(typeof v=='string')return'string';if(v instanceof F)return'float';if(v instanceof Ch)return'char';
+if(Array.isArray(v))return(v.length?tn(v[0]):"'a")+' list';if(v instanceof Ar)return(v.a.length?tn(v.a[0]):"'a")+' array';
+if(v instanceof Tu)return v.v.map(tn).join(' * ');
+if(v instanceof Cn){const c=S.CT[v.n];if(c&&c.t=='option')return(v.a===undefined?"'a":tn(v.a))+' option';return c?c.t:'exn'}
+if(v instanceof Rc)return v.t=='ref'?tn(v.f.contents)+' ref':v.t;
+return'<fun>'}
+const exStr=v=>v.a===undefined?v.n:v.n+' '+vshow(v.a);
+/* ----- bibliothèque ----- */
+const ROOT=Object.create(null),c2=f=>a=>b=>f(a,b),c3=f=>a=>b=>c=>f(a,b,c);
+const out=s=>{S.buf+=s;return U};
+Object.assign(ROOT,{true:true,false:false,max_int:4611686018427387903,min_int:-4611686018427387904,
+print_int:n=>out(String(I(n))),print_float:x=>out(fstr(Fl(x))),print_string:s=>out(s),print_char:c=>out(c.c),print_endline:s=>out(s+'\n'),print_newline:()=>out('\n'),
+string_of_int:n=>String(I(n)),string_of_float:x=>fstr(Fl(x)),
+int_of_string:s=>{if(!/^\s*-?\d+\s*$/.test(s))throw exn('Failure','int_of_string');return parseInt(s)},
+float_of_string:s=>{const v=parseFloat(s);if(isNaN(v))throw exn('Failure','float_of_string');return new F(v)},
+int_of_float:x=>Math.trunc(Fl(x)),truncate:x=>Math.trunc(Fl(x)),float_of_int:n=>new F(I(n)),float:n=>new F(I(n)),int_of_char:c=>c.c.charCodeAt(0),char_of_int:n=>new Ch(String.fromCharCode(I(n))),
+not:b=>!b,fst:t=>t.v[0],snd:t=>t.v[1],ref:v=>new Rc('ref',{contents:v}),incr:r=>{r.f.contents++;return U},decr:r=>{r.f.contents--;return U},ignore:()=>U,
+succ:n=>I(n)+1,pred:n=>I(n)-1,abs:n=>Math.abs(I(n)),abs_float:x=>new F(Math.abs(Fl(x))),sqrt:x=>new F(Math.sqrt(Fl(x))),exp:x=>new F(Math.exp(Fl(x))),log:x=>new F(Math.log(Fl(x))),sin:x=>new F(Math.sin(Fl(x))),cos:x=>new F(Math.cos(Fl(x))),floor:x=>new F(Math.floor(Fl(x))),ceil:x=>new F(Math.ceil(Fl(x))),
+min:c2((a,b)=>cmp(a,b)<=0?a:b),max:c2((a,b)=>cmp(a,b)>=0?a:b),compare:c2((a,b)=>cmp(a,b)),
+failwith:s=>{throw exn('Failure',s)},invalid_arg:s=>{throw exn('Invalid_argument',s)},raise:e=>{throw new OErr(e)},assert:b=>{if(b!==true)throw exn('Assert_failure');return U},
+read_line:()=>{throw exn('End_of_file')},read_int:()=>{throw exn('End_of_file')},
+'List.length':l=>l.length,'List.rev':l=>[...l].reverse(),'List.map':f=>l=>l.map(x=>call(f,x)),'List.filter':f=>l=>l.filter(x=>call(f,x)===true),
+'List.mem':c2((x,l)=>l.some(y=>eq(x,y))),'List.exists':f=>l=>l.some(x=>call(f,x)===true),'List.for_all':f=>l=>l.every(x=>call(f,x)===true),
+'List.iter':f=>l=>{l.forEach(x=>call(f,x));return U},'List.hd':l=>{if(!l.length)throw exn('Failure','hd');return l[0]},'List.tl':l=>{if(!l.length)throw exn('Failure','tl');return l.slice(1)},
+'List.nth':c2((l,n)=>{if(n<0||n>=l.length)throw exn('Failure','nth');return l[n]}),'List.append':c2((a,b)=>[...a,...b]),'List.concat':l=>[].concat(...l),
+'List.fold_left':f=>i=>l=>l.reduce((a,x)=>call(call(f,a),x),i),'List.fold_right':f=>l=>i=>l.reduceRight((a,x)=>call(call(f,x),a),i),
+'List.init':c2((n,f)=>Array.from({length:n},(_,i)=>call(f,i))),'List.sort':f=>l=>[...l].sort((a,b)=>call(call(f,a),b)),
+'Array.make':c2((n,x)=>{if(I(n)<0)throw exn('Invalid_argument','Array.make');return new Ar(Array(n).fill(x))}),'Array.length':a=>a.a.length,'Array.copy':a=>new Ar([...a.a]),
+'Array.make_matrix':c3((n,m,x)=>new Ar(Array.from({length:n},()=>new Ar(Array(m).fill(x))))),'Array.init':c2((n,f)=>new Ar(Array.from({length:n},(_,i)=>call(f,i)))),
+'Array.mem':c2((x,a)=>a.a.some(y=>eq(x,y))),'Array.exists':f=>a=>a.a.some(x=>call(f,x)===true),'Array.for_all':f=>a=>a.a.every(x=>call(f,x)===true),
+'Array.map':f=>a=>new Ar(a.a.map(x=>call(f,x))),'Array.iter':f=>a=>{a.a.forEach(x=>call(f,x));return U},'Array.to_list':a=>[...a.a],'Array.of_list':l=>new Ar([...l]),
+'String.length':s=>s.length,'String.sub':c3((s,i,n)=>{if(i<0||n<0||i+n>s.length)throw exn('Invalid_argument','String.sub');return s.substr(i,n)}),
+'String.make':c2((n,c)=>c.c.repeat(n)),'String.concat':c2((s,l)=>l.join(s)),'String.get':c2((s,i)=>new Ch(s[i])),'String.uppercase_ascii':s=>s.toUpperCase(),'String.lowercase_ascii':s=>s.toLowerCase(),
+'Char.code':c=>c.c.charCodeAt(0),'Char.chr':n=>new Ch(String.fromCharCode(I(n)))});
+['+','-','*','/','mod','+.','-.','*.','/.','**','^','@','=','<>','<','>','<=','>=','==','!='].forEach(o=>ROOT['('+o+')']=c2((a,b)=>bop(o,a,b)));
+ROOT['(::)']=c2((h,t)=>[h,...t]);ROOT['(&&)']=c2((a,b)=>a&&b);ROOT['(||)']=c2((a,b)=>a||b);
+const BASECT={Some:{t:'option',has:1},None:{t:'option'},Failure:{t:'exn',has:1},Invalid_argument:{t:'exn',has:1},Not_found:{t:'exn'},Division_by_zero:{t:'exn'},Assert_failure:{t:'exn'},Match_failure:{t:'exn'},End_of_file:{t:'exn'},Stack_overflow:{t:'exn'},Exit:{t:'exn'}};
+const newSess=()=>({env:Object.create(ROOT),CT:Object.assign({},BASECT),RT:{},buf:''});
+const names=q=>q.t=='pvar'?[q.n]:q.t=='ptup'?q.l.flatMap(names):q.t=='pcons'?names(q.h).concat(names(q.tl)):q.t=='pcon'&&q.a?names(q.a):q.t=='por'?names(q.a):[];
+function errLine(e){if(e instanceof SErr)return e.message;if(e instanceof OErr)return'Exception: '+exStr(e.v)+'.';if(e instanceof TErr)return'Exécution interrompue : trop longue (boucle infinie ?)';if(e instanceof RangeError)return'Stack overflow : récursion trop profonde';return'Error: programme mal typé ou construction non supportée par ce mini-interpréteur'}
+function run(src,sess){S=sess;S.buf='';let o='',v,bad=false;const fl=()=>{o+=S.buf;S.buf=''};
+let ph;try{ph=parse(src)}catch(x){ph=[{t:'err',m:x.message||'Error'}]}
+for(const x of ph){try{steps=0;switch(x.t){
+case'expr':{const r=ev(x.e,S.env);v=r;fl();o+=typeof r=='function'?'- : <fun>\n':'- : '+tname(r)+' = '+vshow(r)+'\n';break}
+case'decl':{const e=Object.create(S.env);if(x.rec)x.bs.forEach(b=>{e[b.p.n]=ev(b.e,e)});else{const vs=x.bs.map(b=>ev(b.e,S.env));x.bs.forEach((b,i)=>{if(!bind(b.p,vs[i],e))throw exn('Match_failure')})}
+fl();S.env=e;x.bs.forEach(b=>names(b.p).forEach(n=>{const r=e[n];o+=typeof r=='function'?'val '+n+' : <fun>\n':'val '+n+' : '+tname(r)+' = '+vshow(r)+'\n'}));break}
+case'type':x.ctors.forEach(([c,h])=>S.CT[c]={t:x.n,has:h});x.fields.forEach(([f,m])=>S.RT[f]={t:x.n,mut:m});o+='type '+x.n+'\n';break;
+case'exn':S.CT[x.n]={t:'exn',has:x.h};o+='exception '+x.n+'\n';break;
+case'err':throw new SErr(x.m)}}
+catch(e){fl();bad=true;o+=errLine(e)+'\n'}}
+fl();return{out:o,v,err:bad}}
+
+const tb=s=>'<table><tr><th>Fonction</th><th>Signature</th><th>Description</th></tr>'+s.trim().split('\n').map(r=>{r=r.split('~');return `<tr><td><code>${r[0]}</code></td><td><code>${esc(r[1])}</code></td><td>${r[2]}</td></tr>`}).join('')+'</table>';
+T[1][1][7][0]='2.8 Pour aller plus loin : programmation purement fonctionnelle';
+T[2][1][1][0]="3.2 L'arbre des appels récursifs";T[2][1][4][0]='3.5 Une structure de données récursive : les listes chaînées';T[2][1][5][0]='3.6 Pour aller plus loin : la récursivité terminale';
+T[3][1][1][0]='4.2 Enregistrement';T[3][1][2][0]='4.3 Type somme';T[5][0]='6 · Modules';
+T.push(['7 · Fiche OCaml 1',[['Fonctions à connaître',tb(`print_int~int -> unit~Affiche un entier
+print_float~float -> unit~Affiche un flottant
+print_string~string -> unit~Affiche une chaîne
+print_newline~unit -> unit~Passe à la ligne
+read_int~unit -> int~Lit un entier
+read_float~unit -> float~Lit un flottant
+read_line~unit -> string~Lit une chaîne
+String.length~string -> int~Nombre de caractères d'une chaîne
+List.length~'a list -> int~Nombre d'éléments d'une liste
+Array.length~'a array -> int~Nombre d'éléments d'un tableau
+Array.make~int -> 'a -> 'a array~Tableau de taille donnée, chaque case contenant la même valeur
+Array.copy~'a array -> 'a array~Copie superficielle d'un tableau`)],["Fonctions à savoir utiliser après un rappel de l'énoncé",tb(`List.mem~'a -> 'a list -> bool~Teste si un élément est présent dans une liste
+List.exists~('a -> bool) -> 'a list -> bool~Prédicat vérifié par au moins un élément
+List.for_all~('a -> bool) -> 'a list -> bool~Prédicat vérifié par tous les éléments
+List.filter~('a -> bool) -> 'a list -> 'a list~Liste des éléments vérifiant le prédicat
+List.map~('a -> 'b) -> 'a list -> 'b list~Applique une fonction à chaque élément
+List.iter~('a -> unit) -> 'a list -> unit~Applique une procédure à chaque élément
+Array.make_matrix~int -> int -> 'a -> 'a array array~Tableau à 2 dimensions, même valeur partout
+Array.init~int -> (int -> 'a) -> 'a array~Array.init n f = [|f 0; ...; f (n-1)|]
+Array.mem~'a -> 'a array -> bool~Teste si un élément est présent
+Array.exists~('a -> bool) -> 'a array -> bool~Prédicat vérifié par au moins un élément
+Array.for_all~('a -> bool) -> 'a array -> bool~Prédicat vérifié par tous les éléments
+Array.map~('a -> 'b) -> 'a array -> 'b array~Applique une fonction à chaque élément
+Array.iter~('a -> unit) -> 'a array -> unit~Applique une procédure à chaque élément`)],T[5][1].pop()]]);
+const EX=[
+[['o',`<p>Que renvoie l'interpréteur pour la dernière ligne ?</p>${c(`let s = 1 + 2 + 3;;
+let s = s * 2;;
+s;;`)}`,['12'],`Chaque <code>let</code> masque le précédent : <code>s</code> vaut 6, puis 12.`],
+['o',`<p>Que renvoie cette expression ?</p>${c(`let x = 1;;
+let y = x + 2 in
+  let x = y + 1 in
+  x + y;;`)}`,['7'],`<code>y</code> vaut 3, le <code>x</code> local vaut 4 : 4 + 3 = 7.`],
+['o',`<p>Que renvoie <code>9 mod 2 = 1 &amp;&amp; 7 / 2 = 3</code> ?</p>`,['true'],`<code>9 mod 2 = 1</code> et <code>7 / 2 = 3</code> (division entière) : vrai.`],
+['c',`<p>Écris <code>moyenne a b</code> : la moyenne de deux entiers, sous forme de flottant.</p>`,`let moyenne a b =\n  (* à compléter *)\n;;`,[[/let\s+moyenne\s+a\s+b\s*=/,`Déclare <code>let moyenne a b = ...</code>`],[/float_of_int/,`Convertis les entiers avec <code>float_of_int</code>`],[/\/\./,`Utilise la division flottante <code>/.</code>`]],`let moyenne a b =\n  (float_of_int a +. float_of_int b) /. 2.;;`]],
+[['o',`<p>Quelle est la signature de <code>let f x y = x</code> ?</p>`,[`'a -> 'b -> 'a`],`<code>y</code> n'est pas utilisé : son type est quelconque et indépendant de celui de <code>x</code>.`],
+['o',`<p>Avec <code>let compose g f = fun x -> g (f x)</code>, que renvoie <code>compose (fun x -> x*x) (fun x -> x+2) 2</code> ?</p>`,['16'],`<code>f</code> d'abord : 2 + 2 = 4, puis <code>g</code> : 4 × 4 = 16.`],
+['c',`<p>Écris <code>applique_deux f x</code> qui renvoie <code>f (f x)</code>.</p>`,`let applique_deux f x =\n  (* à compléter *)\n;;`,[[/let\s+applique_deux\s+f\s+x\s*=/,`Déclare <code>let applique_deux f x = ...</code>`],[/f\s*\(\s*f\s+x\s*\)/,`Applique <code>f</code> deux fois : <code>f (f x)</code>`]],`let applique_deux f x = f (f x);;`],
+['c',`<p>Écris <code>est_pair n</code> qui renvoie un booléen.</p>`,`let est_pair n =\n  (* à compléter *)\n;;`,[[/let\s+est_pair\s+n\s*=/,`Déclare <code>let est_pair n = ...</code>`],[/mod\s*2/,`Utilise <code>mod 2</code>`],[/\breturn\b/,`Il n'y a pas de <code>return</code> en OCaml`,1]],`let est_pair n = n mod 2 = 0;;`]],
+[['o',`<p>Que renvoie <code>f [4;5;6]</code> ?</p>${c(`let rec f = function
+  | [] -> 0
+  | _::q -> 1 + f q;;`)}`,['3'],`<code>f</code> calcule la longueur de la liste.`],
+['c',`<p>Écris <code>puissance x n</code> (xⁿ, avec <code>n ≥ 0</code>) de façon récursive.</p>`,`let rec puissance x n =\n  (* à compléter *)\n;;`,[[/let\s+rec\s+puissance/,`Fonction récursive : <code>let rec puissance ...</code>`],[/n\s*=\s*0|\|\s*0\s*->/,`Cas de base : <code>n = 0</code>`],[/puissance\s+x\s*\(/,`Appel récursif sur un exposant plus petit : <code>puissance x (n-1)</code>`]],`let rec puissance x n =\n  if n = 0 then 1\n  else x * puissance x (n-1);;`],
+['c',`<p>Écris <code>somme l</code> : la somme d'une liste d'entiers, par filtrage (nomme la queue <code>q</code>).</p>`,`let rec somme l = match l with\n  (* à compléter *)\n;;`,[[/\[\]\s*->\s*0/,`Cas de base : <code>[] -> 0</code>`],[/::/,`Cas récursif avec <code>t::q</code>`],[/somme\s+q/,`Appel récursif sur la queue : <code>somme q</code>`]],`let rec somme l = match l with\n  | [] -> 0\n  | t::q -> t + somme q;;`],
+['c',`<p>Écris <code>miroir l</code> <b>récursive terminale</b> (fonction auxiliaire à accumulateur), sans <code>@</code>.</p>`,`let miroir l =\n  (* à compléter *)\n;;`,[[/let\s+rec\s+\w+/,`Il faut une fonction auxiliaire <code>let rec</code>`],[/\[\]\s*->/,`Cas de base <code>[] -> ...</code>`],[/::/,`Utilise <code>::</code> pour construire l'accumulateur`],[/@/,`N'utilise pas <code>@</code>`,1]],`let miroir l =\n  let rec aux l acc = match l with\n    | [] -> acc\n    | t::q -> aux q (t::acc)\n  in aux l [];;`]],
+[['o',`<p>Que renvoie cette expression ?</p>${c(`type resultat = OK of int | Erreur;;
+match OK 3 with
+  | OK n -> n + 1
+  | Erreur -> 0;;`)}`,['4'],`Le motif <code>OK n</code> lie <code>n</code> à 3 : 3 + 1 = 4.`],
+['c',`<p>Définis un type <code>forme</code> (<code>Cercle</code> de rayon flottant, <code>Rectangle</code> de deux flottants), puis <code>aire</code> (π ≈ <code>3.14</code>).</p>`,`type forme =\n  (* à compléter *)\n\nlet aire f =\n  (* à compléter *)\n;;`,[[/type\s+forme\s*=/,`Déclare <code>type forme = ...</code>`],[/Cercle\s+of\s+float/,`<code>Cercle of float</code>`],[/Rectangle\s+of\s+float\s*\*\s*float/,`<code>Rectangle of float * float</code>`],[/match|function/,`Utilise un filtrage (<code>match</code>)`],[/\*\./,`Utilise les opérateurs flottants (<code>*.</code>)`]],`type forme = Cercle of float | Rectangle of float * float\n\nlet aire f = match f with\n  | Cercle r -> 3.14 *. r *. r\n  | Rectangle (l, h) -> l *. h;;`]],
+[['o',`<p>Que renvoie <code>!p</code> ?</p>${c(`let p = ref 3;;
+p := !p * 2;;
+!p;;`)}`,['6'],`<code>p := !p * 2</code> remplace le contenu 3 par 6.`],
+['o',`<p>Que vaut <code>t</code> à la fin ?</p>${c(`let t = [|1;2;3|];;
+t.(1) <- 10;;
+t;;`)}`,['[|1;10;3|]'],`On modifie la case d'indice 1 (indices à partir de 0) : <code>[|1; 10; 3|]</code>.`],
+['c',`<p>Écris <code>somme_tab t</code> : la somme d'un tableau d'entiers, avec une boucle <code>for</code> et une référence.</p>`,`let somme_tab t =\n  (* à compléter *)\n;;`,[[/ref\s+0/,`Une référence initialisée à 0 : <code>ref 0</code>`],[/for\s+\w+\s*=\s*0\s+to/,`Boucle <code>for i = 0 to ...</code>`],[/Array\.length/,`Utilise <code>Array.length t</code>`],[/:=/,`Mets à jour la référence avec <code>:=</code>`]],`let somme_tab t =\n  let s = ref 0 in\n  for i = 0 to Array.length t - 1 do\n    s := !s + t.(i)\n  done;\n  !s;;`]],
+[['o',`<p>Quelle commande compile <code>hello.ml</code> en code natif, vers l'exécutable <code>hello</code> ?</p>`,['ocamlopt hello.ml -o hello'],`<code>ocamlopt</code> produit du code natif ; <code>ocamlc</code>, du code-octet.`]]
+];
+const TS=[[0,3,[],['moyenne 4 6 = 5.','moyenne 1 2 = 1.5']],[1,2,[],['applique_deux (fun x -> x + 1) 0 = 2','applique_deux (fun s -> s ^ "a") "b" = "baa"']],[1,3,[],['est_pair 4','not (est_pair 7)','est_pair 0']],
+[2,1,[[/let\s+rec\s+puissance/,'Fonction récursive : <code>let rec puissance ...</code>']],['puissance 2 10 = 1024','puissance 3 0 = 1','puissance 5 1 = 5']],[2,2,[],['somme [] = 0','somme [1;2;3] = 6']],
+[2,3,[[/let\s+rec\s+\w+/,'Il faut une fonction auxiliaire <code>let rec</code>'],[/@/,"N'utilise pas <code>@</code>",1]],['miroir [] = []','miroir [1;2;3] = [3;2;1]','miroir [4] = [4]']],
+[3,1,[],['aire (Rectangle (2., 3.)) = 6.','abs_float (aire (Cercle 1.) -. 3.14) < 0.01']],[4,2,[[/for\s/,'Utilise une boucle <code>for</code>'],[/:=/,'Mets à jour une référence avec <code>:=</code>']],['somme_tab [|1;2;3|] = 6','somme_tab [||] = 0']]];
+TS.forEach(([i,k,ch,ts])=>{EX[i][k][3]=ch;EX[i][k][5]=ts});
+let DONE={};try{DONE=JSON.parse(localStorage.getItem('done')||'{}')}catch(e){}
+const norm=s=>s.toLowerCase().replace(/\s+/g,'').replace(/^-:[^=]*=/,'').replace(/^val\w+:/,'').replace(/=<fun>$/,'');
+const hist=(id,t,s)=>document.getElementById(id+'_h').insertAdjacentHTML('afterbegin',`<div class="hb"><div class="hh">${esc(t)}</div><pre>${esc(s)}</pre></div>`);
+const SS={};
+function runBox(id){SS[id]=newSess();const r=run(document.getElementById(id+'_i').value,SS[id]);hist(id,'▶ Exécution du code',r.out||'(aucun résultat)')}
+function repl(id){const el=document.getElementById(id+'_r');const q=el.value.trim();if(!q)return;if(!SS[id]){SS[id]=newSess();run(document.getElementById(id+'_i').value,SS[id])}
+const r=run(/;;\s*$/.test(q)?q:q+';;',SS[id]);hist(id,'# '+q,r.out);el.value=''}
+const conUI=(id,extra)=>`<p><button class="alt" onclick="runBox('${id}')">▶ Exécuter</button>${extra}</p><input id="${id}_r" placeholder="Tester une expression après l'exécution, ex. : f 3 (Entrée)" onkeydown="if(event.key=='Enter')repl('${id}')"><div class="hist" id="${id}_h"></div>`;
+const exs=i=>EX[i].map((e,k)=>{const id=`e${i}_${k}`,o=e[0]=='o';
+return `<div class="ex"><b>Exercice ${k+1}</b> <span id="${id}_m">${DONE[id]?'✔':''}</span>${e[1]}`+(o?`<input id="${id}_i" placeholder="Ta réponse" onkeydown="if(event.key=='Enter')chk(${i},${k})"><p><button onclick="chk(${i},${k})">Vérifier</button></p>`:`<textarea id="${id}_i" rows="7" spellcheck="false">${esc(e[2])}</textarea>`+conUI(id,`<button onclick="chk(${i},${k})">Vérifier</button><button class="alt" onclick="document.getElementById('${id}_i').value=EX[${i}][${k}][2]">Recommencer</button>`))+`<div id="${id}_f"></div><details><summary>Solution</summary>`+(o?`<p><code>${esc(e[2][0])}</code> — ${e[3]}</p>`:c(e[4]))+`</details></div>`}).join('');
+function chk(i,k){const e=EX[i][k],id=`e${i}_${k}`,v=document.getElementById(id+'_i').value,f=document.getElementById(id+'_f');let er=[],ok;
+if(e[0]=='o'){ok=e[2].some(a=>norm(a)==norm(v));f.innerHTML=ok?'✔ Correct. '+e[3]:'✘ Pas tout à fait : relis le code et réessaie.'}
+else{if(v.trim()==e[2].trim())er.push("Complète d'abord le squelette.");
+else{const s=newSess(),r=run(v,s);
+if(r.err)er.push("Ton code ne s'exécute pas : <code>"+esc(r.out.trim().split('\n').pop())+'</code>');
+else(e[5]||[]).forEach(t=>{const q=run(t+';;',s);if(!(q.v===true&&!q.err))er.push('Test échoué : <code>'+esc(t)+'</code>'+(q.err?' → <code>'+esc(q.out.trim())+'</code>':''))});
+e[3].forEach(([x,m,n])=>{if(!!n==x.test(v))er.push(m)})}
+ok=!er.length;f.innerHTML=ok?`✔ Ton code passe les ${(e[5]||[]).length} tests et respecte les consignes.`:'✘ À revoir :<ul>'+er.map(m=>'<li>'+m+'</li>').join('')+'</ul>'}
+f.className=ok?'good':'bad';
+if(ok){DONE[id]=1;try{localStorage.setItem('done',JSON.stringify(DONE))}catch(x){}document.getElementById(id+'_m').textContent='✔'}}
+const TOC=[['1 Variables',2,0,0,[['1.1 Portée',3,2],['1.2 Opérations sur les nombres',3,3],['1.3 Chaînes de caractères',5,4],['1.4 Opérateurs booléens',6,5]]],
+['2 Fonctions',7,1,0,[['2.1 Fonctions de conversion',7,0],["2.2 Fonctions d'affichage",8,1],['2.3 Déclarer une fonction',9,2],['2.4 Fonctions locales',9,3],['2.5 Structures conditionnelles',10,4],['2.6 Polymorphisme paramétrique',11,5],["2.7 Fonctions d'ordre supérieur",11,6],['2.8 Pour aller plus loin : programmation purement fonctionnelle',13,7]]],
+['3 Récursivité',14,2,0,[['3.1 Fonctions récursives',14,0],["3.2 L'arbre des appels récursifs",16,1],['3.3 Filtrage',17,2],['3.4 Récursivité croisée',18,3],['3.5 Une structure de données récursive : les listes chaînées',19,4],['3.6 Pour aller plus loin : la récursivité terminale',21,5]]],
+['4 Des nouveaux types',22,3,0,[['4.1 Tuples',22,0],['4.2 Enregistrement',23,1],['4.3 Type somme',25,2],['4.4 Exceptions',26,3]]],
+['5 Aspects impératifs',28,4,0,[['5.1 Références',28,0],['5.2 Boucles',29,1],['5.3 Tableaux',31,2]]],
+['6 Modules',34,5,0,[]]];
+const toc=()=>'<h1>Table des matières</h1><p>Clique sur une ligne pour aller à la section. Les numéros sont ceux des pages du cours imprimé.</p>'+TOC.map(([t,p,ch,s,u])=>`<a class="tl" href="#" onclick="show(${ch},${s});return false"><b>${t}</b><span>${p}</span></a>`+u.map(([n,g,q])=>`<a class="tl s" href="#" onclick="show(${ch},${q});return false">${n}<span>${g}</span></a>`).join('')).join('')+'<a class="tl" href="#" onclick="show(6);return false"><b>Fiche OCaml 1 : fonctions à connaître, compilation</b><span></span></a>';
+const sbx=()=>'<h1>Bac à sable OCaml</h1><p>Écris du code, clique sur « Exécuter », puis teste des expressions dans la ligne en dessous. Le mini-interpréteur gère le sous-ensemble du cours (fonctions, récursivité, listes, filtrage, types, exceptions, références, boucles, tableaux). Les types des fonctions ne sont pas affichés (<code>&lt;fun&gt;</code>) et seules quelques erreurs de typage sont détectées.</p><div class="ex"><textarea id="sb_i" rows="12" spellcheck="false">let rec fact n = if n = 0 then 1 else n * fact (n-1);;\nfact 10;;</textarea>'+conUI('sb','')+'</div>';
+function show(i,k){const t=T[i],ne=i>=0?EX[i]?EX[i].length:0:0;
+let h='<h1>🐫 Cours OCaml</h1><p class="who">MP2I Fénelon Sainte-Marie<br>Amine IRAQI</p><button class="'+(i==-1?'on':'')+'" onclick="show(-1)">📑 Table des matières</button><button class="'+(i==-2?'on':'')+'" onclick="show(-2)">▶ Bac à sable</button>'+T.map((x,j)=>`<button class="${j==i?'on':''}" onclick="show(${j})">${x[0]}</button>`+(j==i?x[1].map((s,q)=>`<a href="#s${q}">${s[0]}</a>`).join('')+(ne?`<a href="#sx">Exercices (${EX[i].filter((_,q)=>DONE['e'+i+'_'+q]).length}/${ne})</a>`:''):'')).join('');
+document.getElementById('nv').innerHTML=h;
+document.getElementById('mn').innerHTML=i==-2?sbx():i<0?toc():`<h1>${t[0]}</h1>`+t[1].map((s,q)=>`<section id="s${q}"><h2>${s[0]}</h2>${s[1]}</section>`).join('')+(ne?`<section id="sx"><h2>Exercices</h2><p>Saisis ta réponse puis clique sur « Vérifier ». Pour le code : « ▶ Exécuter » lance ton code et affiche le résultat dans l'historique (tu peux ensuite tester des expressions) ; « Vérifier » exécute des tests sur ton code.</p>${exs(i)}</section>`:'')+`<div class="pg">${i>0?`<button onclick="show(${i-1})">← ${T[i-1][0]}</button>`:'<span></span>'}${i<T.length-1?`<button onclick="show(${i+1})">${T[i+1][0]} →</button>`:''}</div>`;
+if(k==null)window.scrollTo(0,0);else document.getElementById('s'+k).scrollIntoView();
+try{localStorage.setItem('ch',i)}catch(e){}}
+let s0=0;try{s0=+localStorage.getItem('ch')||0}catch(e){}
+show(s0>=-2&&s0<T.length?s0:0);
+</script></body></html>
